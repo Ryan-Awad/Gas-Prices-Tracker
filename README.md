@@ -1,6 +1,6 @@
 # Gas Prices Tracker
 
-Required Libraries:
+Required Dependencies:
  - Requests
  - BeautifulSoup
  - Matploitlib
