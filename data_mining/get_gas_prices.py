@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-import json
 import datetime
+import csv
 
 def get_gas_prices(_dir, state_province, city):
     url = "https://www.gasbuddy.com" + _dir
@@ -23,7 +23,7 @@ def get_gas_prices(_dir, state_province, city):
             gas_type = g.find("span", {"class", "colors__textGrey___2UWmi text__fluid___1X7fO text__centered___2J9MR"}).get_text()
             gas_type_price = g.find("span", {"class", "text__xl___2MXGo text__bold___1C6Z_ text__left___1iOw3 FuelTypePriceDisplay__price___3iizb"}).get_text()
             if gas_type_price == "- - -":
-                gas_type_price = "unavailable gas"
+                gas_type_price = ""
             else:
                 for c in [char for char in gas_type_price]:
                     if c != ".":
@@ -40,26 +40,16 @@ def get_gas_prices(_dir, state_province, city):
         d = datetime.date.today()
         date = str(d).replace('-', '/')
 
+        # Turning data into a one-liner to write to gas_data.csv 
 
-        # Make JSON object with all the data
-        data = {
-            "date": date,
-            "company": company,
-            "state-province": state_province.replace("%20", " ").lower(),
-            "city": city.replace("%20", " ").lower()
-        }
+        data_line = "\n" + str(date) + "," + str(company) + "," + str(state_province.replace("%20", " ").lower()) + "," + str(city.replace("%20", " ").lower())
 
         for i in range(len(gas_types)):
-            data["gas-type-" + str((i + 1))] = gas_types[i].lower()
-            data["gas-price-" + str((i + 1))] = gas_types_prices[i]
+            data_line += ("," + str(gas_types_prices[i]))
+        
+        with open('gas_data.csv', 'a') as gas_db:
+            print("Recieved Data Line: " + str(data_line))
+            gas_db.write(data_line)
 
-
-        read_gas_data = open("gas_data.json", "r")
-        data_arr = json.load(read_gas_data)
-        write_gas_data = open("gas_data.json", "w")
-        data_arr.append(data)
-
-        json.dump(data_arr, write_gas_data, indent=3)
-        print("Data added!")
     else:
         print("Something went wrong with Gas price URL. Skipping this one!") # make it try again a certain amount of times

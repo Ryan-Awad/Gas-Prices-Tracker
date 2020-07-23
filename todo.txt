@@ -1,0 +1,4 @@
+ - Use Seaborn for graphing
+ - When storing data, make sure do deal with currency conversion (dollars, cents, usd, cnd, etc...)
+ - Figure out the amount of gas for the prices that are shown (2 dollars? is it 2$ for a gallons, or a litre, what?)
+ - Handle the location names that are labeled differently on GasBuddy (Ex: "British Columbia" is label as "BC" in the URL)

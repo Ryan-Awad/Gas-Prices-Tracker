@@ -1,7 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import json
-import datetime
 from data_mining.get_gas_prices import *
 
 print("Data from: https://www.gasbuddy.com/")
@@ -36,7 +34,6 @@ while True:
 
     for url in p_URLs: # execute web scrape function using all the urls in the p_URLs array
         get_gas_prices(url, state_province, city)
-
 
     retry = input("Would you like to build more data? (y/n): ").lower()
     if retry == "y":
